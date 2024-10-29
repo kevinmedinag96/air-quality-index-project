@@ -1,8 +1,8 @@
-name: GitHubAction Job Schedule - ETL from aqicn.org
+name: GitHubAction Job Schedule ETL from aqicn.org
 
 on:
   schedule:
-    -cron: '00/15 * * * *'
+    - cron: '00/15 * * * *'
 
 jobs:
   build:
