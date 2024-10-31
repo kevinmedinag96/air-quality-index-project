@@ -4,6 +4,14 @@ on:
  schedule:
   - cron: '*/10 * * * *'
 
+env:
+  KEVIN_AQICN_KEY: '${{secrets.KEVIN_AQICN_KEY}}'
+  AWS_ACCESS_KEY: '${{secrets.AWS_ACCESS_KEY}}'
+  AWS_SECRET_KEY: '${{secrets.AWS_SECRET_KEY}}'
+  AWS_REGION_NAME: '${{secrets.AWS_REGION_NAME}}'
+  AWS_IAM_ROLE_ARN: '${{secrets.AWS_IAM_ROLE_ARN}}'
+  
+
 jobs:
   aqi_docker_container:
     runs-on: ubuntu-latest
@@ -22,16 +30,14 @@ jobs:
       #    password: ${{secrets.DOCKER_PASSWORD}}
       
       - name: Build Docker image
-        run: docker build -t aqi-img:latest .
+        run: |
+          docker build --build-args KEVIN_AQICN_KEY=$KEVIN_AQICN_KEY \
+          AWS_ACCESS_KEY=$AWS_ACCESS_KEY AWS_SECRET_KEY=$AWS_SECRET_KEY AWS_REGION_NAME=$AWS_REGION_NAME \
+          AWS_IAM_ROLE_ARN=$AWS_IAM_ROLE_ARN -t aqi-img:latest .
       
       - name: Run Docker Container
         run: |
           docker run \
-            -e KEVIN_AQICN_KEY=${{secrets.KEVIN_AQICN_KEY}} \
-            AWS_ACCESS_KEY=${{secrets.AWS_ACCESS_KEY}} \
-            AWS_SECRET_KEY=${{secrets.AWS_SECRET_KEY}} \
-            AWS_REGION_NAME=${{secrets.AWS_REGION_NAME}} \
-            AWS_IAM_ROLE_ARN=${{secrets.AWS_IAM_ROLE_ARN}} \
             aqi-img:latest
 
 
