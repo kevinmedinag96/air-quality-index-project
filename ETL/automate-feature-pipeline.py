@@ -4,6 +4,8 @@ import pytz
 import boto3
 from decimal import Decimal
 from pydantic import BaseModel
+import os
+
 
 geolocs = {
     "Mexico City" : (19.432608,-99.133209), #latitude, longitude
@@ -43,16 +45,54 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     data_json["location"] = input_aqicn.Location
 
     # get boto3 dynamoDB client for desired table
-    dynamodb = boto3.resource('dynamodb')
+    #dynamodb = boto3.resource('dynamodb')
+    """ session = IAMRolesAnywhereSession(
+        #profile_arn="arn:aws:rolesanywhere:eu-central-1:************:profile/a6294488-77cf-4d4a-8c5c-40b96690bbf0",
+        role_arn="arn:aws:iam::982534381087:role/service-role/SageMaker-DataScientist2",
+        #trust_anchor_arn="arn:aws:rolesanywhere:eu-central-1::************::trust-anchor/4579702c-9abb-47c2-88b2-c734e0b29539",
+        #certificate='certificate.pem',
+        #private_key='privkey.pem',
+        region="us-east-1"
+    ).get_session() """
+
+    #get hard-coded aws credentials from AWS IAM user kevin-access-user
+
+    session = boto3.Session(
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY"],
+        aws_secret_access_key= os.environ["AWS_SECRET_KEY"],
+        region_name="us-east-1"
+    )
+
+    
+
+    #get temporary access credentials...
+    sts_client = session.client("sts")
+    
+
+    response = sts_client.assume_role(
+        RoleArn="arn:aws:iam::982534381087:role/kevin-aqi-proj-role",
+        RoleSessionName="kevin-store-aqi-session"
+    )
+    #print(response)
+
+    #manipulate dynamodb desired table...
+    new_session = boto3.Session(aws_access_key_id=response['Credentials']['AccessKeyId'],
+                      aws_secret_access_key=response['Credentials']['SecretAccessKey'],
+                      aws_session_token=response['Credentials']['SessionToken'],
+                      region_name="us-east-1")
+
+    dynamodb = new_session.resource("dynamodb")
     table = dynamodb.Table('AirQualityIndexRecords')
 
     data_json["id"] = table.scan()["Count"]
 
     #Load...
-
     table.put_item(
         Item=data_json
-    )
+    ) 
+    
+
+   
 
     
 
