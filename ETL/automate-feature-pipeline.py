@@ -60,17 +60,20 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     session = boto3.Session(
         aws_access_key_id=os.environ["AWS_ACCESS_KEY"],
         aws_secret_access_key= os.environ["AWS_SECRET_KEY"],
-        region_name="us-east-1"
+        region_name=os.environ["AWS_REGION_NAME"]
     )
 
-    
+    print(f"access key :{os.environ['AWS_ACCESS_KEY']}")
+    print(f"secret key :{os.environ['AWS_SECRET_KEY']}")
+    print(f"region name :{os.environ['AWS_REGION_NAME']}")
+    print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN']}")
 
     #get temporary access credentials...
     sts_client = session.client("sts")
     
 
     response = sts_client.assume_role(
-        RoleArn="arn:aws:iam::982534381087:role/kevin-aqi-proj-role",
+        RoleArn=os.environ["AWS_IAM_ROLE_ARN"],
         RoleSessionName="kevin-store-aqi-session"
     )
     #print(response)
@@ -104,6 +107,8 @@ if __name__ == "__main__":
     #iterate through each geolocation to apply the ETL
     for k in geolocs.keys():
         loc = k
-        aqicn_token ="4160d19c73429aaee7d89467b128c082b3c6b868" #personal use
+        aqicn_token = os.environ["KEVIN_AQICN_KEY"] #personal use
+
+        print(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
         air_quality_index_feature_pipeline(aqicn_input)
