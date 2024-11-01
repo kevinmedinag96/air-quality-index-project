@@ -18,6 +18,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker
       
       - name: Build Docker Image
         uses: docker/build-push-action@v6
@@ -30,8 +32,9 @@ jobs:
             "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}"
             "AWS_REGION_NAME=${{ secrets.AWS_REGION_NAME }}"
             "AWS_IAM_ROLE_ARN=${{ secrets.AWS_IAM_ROLE_ARN }}"
-          tags: aqi-img:latest
           load: true
+          tags: aqi-img:latest
+
 
       - name: View Docker images
         run:
