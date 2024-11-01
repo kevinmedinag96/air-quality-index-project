@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
           secrets: |
             "KEVIN_AQICN_KEY=${{ secrets.KEVIN_AQICN_KEY }}"
             "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}"
@@ -46,10 +46,11 @@ jobs:
         run: |
           ls -la 
           docker images
+          docker buildx imagetools inspect localhost:5000/aqi-img:latest
 
       - name: Run Docker Container
         run:
-          docker run aqi-img:latest
+          docker run localhost:5000/aqi-img:latest
             
 
       #- name: Login to Docker Hub
