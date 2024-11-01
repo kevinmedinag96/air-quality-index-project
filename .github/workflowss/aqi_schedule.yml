@@ -38,7 +38,7 @@ jobs:
       - name: Run Docker Container
         run: |
           docker run \
-            aqi-img:latest
+          aqi-img:latest
 
 
 
