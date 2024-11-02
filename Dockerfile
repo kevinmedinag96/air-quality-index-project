@@ -13,7 +13,7 @@ RUN ls -la
 RUN echo $KEVIN_AQICN_KEY
 RUN echo $AWS_ACCESS_KEY
 
-Eun echo "end testing..."
+Run echo "end testing..."
 WORKDIR /app
 
 #install third party packages...
