@@ -10,8 +10,6 @@ RUN echo "testing..."
 
 RUN ls -la run/
 
-RUN ls -la run/secrets/
-
 RUN echo $KEVIN_AQICN_KEY
 RUN echo $AWS_ACCESS_KEY
 
