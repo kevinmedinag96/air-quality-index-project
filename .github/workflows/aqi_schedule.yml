@@ -34,9 +34,9 @@ jobs:
           context: .
           platforms: linux/amd64
           secrets: |
-            "KEVIN_AQICN_KEY=${{ secrets.KEVIN_AQICN_KEY }}"
-            "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}"
-            "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}"
+            KEVIN_AQICN_KEY: "${{ secrets.KEVIN_AQICN_KEY }}"
+            AWS_ACCESS_KEY: "${{ secrets.AWS_ACCESS_KEY }}"
+            AWS_SECRET_KEY: "${{ secrets.AWS_SECRET_KEY }}"
             "AWS_REGION_NAME=${{ secrets.AWS_REGION_NAME }}"
             "AWS_IAM_ROLE_ARN=${{ secrets.AWS_IAM_ROLE_ARN }}"
           tags: localhost:5000/aqi-img:latest
