@@ -13,6 +13,8 @@ jobs:
         image: registry:2
         ports:
           - 5000:5000
+
+    environment: project-keys      
     
     steps:
       - name: Checkout repository
@@ -59,11 +61,7 @@ jobs:
       #    username: ${{secrets.DOCKER_USERNAME}}
       #    password: ${{secrets.DOCKER_PASSWORD}}
       
-      #- name: Build Docker image
-      #  run: |
-      #    docker build --build-args KEVIN_AQICN_KEY=$KEVIN_AQICN_KEY \
-      #    AWS_ACCESS_KEY=$AWS_ACCESS_KEY AWS_SECRET_KEY=$AWS_SECRET_KEY AWS_REGION_NAME=$AWS_REGION_NAME \
-      #    AWS_IAM_ROLE_ARN=$AWS_IAM_ROLE_ARN -t aqi-img:latest .
+
       
 
 
