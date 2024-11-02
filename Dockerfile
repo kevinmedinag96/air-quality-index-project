@@ -8,9 +8,9 @@ RUN --mount=type=secret,id=KEVIN_AQICN_KEY,env=KEVIN_AQICN_KEY \
     --mount=type=secret,id=AWS_IAM_ROLE_ARN,env=AWS_IAM_ROLE_ARN
 RUN echo "testing..."
 
-RUN ls -la ./run/
+RUN ls -la run/
 
-RUN ls -la ./run/secrets
+RUN ls -la run/secrets/
 
 RUN echo $KEVIN_AQICN_KEY
 RUN echo $AWS_ACCESS_KEY
