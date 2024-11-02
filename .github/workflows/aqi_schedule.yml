@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64           
           secrets: |
             KEVIN_AQICN_KEY: ${{ secrets.KEVIN_AQICN_KEY }}
             AWS_ACCESS_KEY= ${{ secrets.AWS_ACCESS_KEY }}

@@ -6,7 +6,14 @@ RUN --mount=type=secret,id=KEVIN_AQICN_KEY,env=KEVIN_AQICN_KEY \
     --mount=type=secret,id=AWS_SECRET_KEY,env=AWS_SECRET_KEY \
     --mount=type=secret,id=AWS_REGION_NAME,env=AWS_REGION_NAME \
     --mount=type=secret,id=AWS_IAM_ROLE_ARN,env=AWS_IAM_ROLE_ARN
+RUN echo "testing..."
 
+RUN ls -la
+
+RUN echo $KEVIN_AQICN_KEY
+RUN echo $AWS_ACCESS_KEY
+
+Eun echo "end testing..."
 WORKDIR /app
 
 #install third party packages...
