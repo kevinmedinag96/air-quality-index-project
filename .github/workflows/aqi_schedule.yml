@@ -6,13 +6,7 @@ on:
   
 
 jobs:
-  aqi_docker_container:
-    environment: project-keys
-    env: |
-      key_1: ${{ secrets.KEVIN_AQICN_KEY }}
-      key_2: ${{ secrets.AWS_ACCESS_KEY }}
-
-      
+  aqi_docker_container:      
       
     runs-on: ubuntu-latest
     services:
@@ -40,9 +34,13 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
+          environment: project-keys
+          env: |
+            key1: ${{ secrets.KEVIN_AQICN_KEY }}
+            key2: ${{ secrets.AWS_ACCESS_KEY }}
           secrets: |
-            KEVIN_AQICN_KEY: env.key_1
-            AWS_ACCESS_KEY= env.key_2
+            KEVIN_AQICN_KEY: env.key1
+            AWS_ACCESS_KEY= env.key2
             AWS_SECRET_KEY: "${{ secrets.AWS_SECRET_KEY }}"
             "AWS_REGION_NAME=${{ secrets.AWS_REGION_NAME }}"
             "AWS_IAM_ROLE_ARN=${{ secrets.AWS_IAM_ROLE_ARN }}"
