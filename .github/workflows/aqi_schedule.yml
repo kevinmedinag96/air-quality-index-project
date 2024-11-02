@@ -34,13 +34,9 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          environment: project-keys
-          env: |
-            key1: ${{ secrets.KEVIN_AQICN_KEY }}
-            key2: ${{ secrets.AWS_ACCESS_KEY }}
           secrets: |
-            KEVIN_AQICN_KEY: env.key1
-            AWS_ACCESS_KEY= env.key2
+            KEVIN_AQICN_KEY: ${{ secrets.KEVIN_AQICN_KEY }}
+            AWS_ACCESS_KEY= ${{ secrets.AWS_ACCESS_KEY }}
             AWS_SECRET_KEY: "${{ secrets.AWS_SECRET_KEY }}"
             "AWS_REGION_NAME=${{ secrets.AWS_REGION_NAME }}"
             "AWS_IAM_ROLE_ARN=${{ secrets.AWS_IAM_ROLE_ARN }}"
