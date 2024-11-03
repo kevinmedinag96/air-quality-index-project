@@ -27,8 +27,8 @@ RUN echo "testing..."
 
 RUN ls -la run/
 
-RUN echo $KEVIN_AQICN_KEY
-RUN echo $AWS_ACCESS_KEY
+RUN echo $KEVIN_AQICN_KEY_2
+RUN echo $AWS_ACCESS_KEY_2
 
 Run echo "end testing..."
 WORKDIR /app

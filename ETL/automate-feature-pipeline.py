@@ -93,6 +93,8 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     table.put_item(
         Item=data_json
     ) 
+
+    print("Done...")
     
 
    
@@ -107,7 +109,8 @@ if __name__ == "__main__":
     #iterate through each geolocation to apply the ETL
     for k in geolocs.keys():
         loc = k
-        aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
+        #aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
+        aqicn_token = "arn:aws:iam::982534381087:role/kevin-aqi-proj-role"
 
         print(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
