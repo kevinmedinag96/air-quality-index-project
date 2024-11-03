@@ -110,7 +110,7 @@ if __name__ == "__main__":
     for k in geolocs.keys():
         loc = k
         #aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
-        aqicn_token = "arn:aws:iam::982534381087:role/kevin-aqi-proj-role"
+        aqicn_token = "4160d19c73429aaee7d89467b128c082b3c6b868"
 
         print(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
