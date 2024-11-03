@@ -53,14 +53,12 @@ jobs:
         with:
           context: .
           platforms: linux/amd64           
-          build-args: |
+          secrets: |
             KEVIN_AQICN_KEY= "${{ secrets.KEVIN_AQICN_KEY }}"
             AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}"
             AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}"
             AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
             AWS_IAM_ROLE_ARN="${{ secrets.AWS_IAM_ROLE_ARN }}"
-            TEST= ${{ secrets.TEST}}
-            TEST2 = ${{vars.VARIABLE_TEST}}
           tags: localhost:5000/aqi-img:latest
           push: true
 
