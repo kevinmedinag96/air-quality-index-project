@@ -46,7 +46,7 @@ jobs:
       
       - name: Push Docker Image
         run: |
-        docker image push localhost:5000/aqi-img:latest
+          docker image push localhost:5000/aqi-img:latest
       
       #- name: Build Docker Image
       #  uses: docker/build-push-action@v6
