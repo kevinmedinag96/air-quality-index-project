@@ -34,33 +34,33 @@ jobs:
       #    echo echo ${{secrets.KEVIN_AQICN_KEY}} | sed 's/./& /g'
       #    echo "end of testing..."
       
-      - name: Build Docker Image
-        run: |
-          docker build -t localhost:5000/aqi-img:latest \
-          --build-arg KEVIN_AQICN_KEY= "${{ secrets.KEVIN_AQICN_KEY }}" \
-          --build-arg AWS_ACCESS_KEY= "${{ secrets.AWS_ACCESS_KEY }}" \
-          --build-arg AWS_SECRET_KEY= "${{ secrets.AWS_SECRET_KEY }}" \
-          --build-arg AWS_REGION_NAME= "${{ secrets.AWS_REGION_NAME }}" \
-          --build-arg AWS_IAM_ROLE_ARN= "${{ secrets.AWS_IAM_ROLE_ARN }}" \
-          .
-      
-      - name: Push Docker Image
-        run: |
-          docker image push localhost:5000/aqi-img:latest
-      
       #- name: Build Docker Image
-      #  uses: docker/build-push-action@v6
-      #  with:
-      #    context: .
-      #    platforms: linux/amd64           
-      #    secrets: 
-      #      - KEVIN_AQICN_KEY: "${{ secrets.KEVIN_AQICN_KEY }}"
-      #      - AWS_ACCESS_KEY: "${{ secrets.AWS_ACCESS_KEY }}"
-      #      - AWS_SECRET_KEY: "${{ secrets.AWS_SECRET_KEY }}"
-      #      - AWS_REGION_NAME: "${{ secrets.AWS_REGION_NAME }}"
-      #      - AWS_IAM_ROLE_ARN: "${{ secrets.AWS_IAM_ROLE_ARN }}"
-      #    tags: localhost:5000/aqi-img:latest
-      #    push: true
+      #  run: |
+      #    docker build -t localhost:5000/aqi-img:latest \
+      #    --build-arg KEVIN_AQICN_KEY= "${{ secrets.KEVIN_AQICN_KEY }}" \
+      #    --build-arg AWS_ACCESS_KEY= "${{ secrets.AWS_ACCESS_KEY }}" \
+      #    --build-arg AWS_SECRET_KEY= "${{ secrets.AWS_SECRET_KEY }}" \
+      #    --build-arg AWS_REGION_NAME= "${{ secrets.AWS_REGION_NAME }}" \
+      #    --build-arg AWS_IAM_ROLE_ARN= "${{ secrets.AWS_IAM_ROLE_ARN }}" \
+      #    .
+      
+      #- name: Push Docker Image
+      #  run: |
+      #    docker image push localhost:5000/aqi-img:latest
+      
+      - name: Build Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64           
+          build-args: 
+            - KEVIN_AQICN_KEY= "${{ secrets.KEVIN_AQICN_KEY }}"
+            - AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}"
+            - AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}"
+            - AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
+            - AWS_IAM_ROLE_ARN="${{ secrets.AWS_IAM_ROLE_ARN }}"
+          tags: localhost:5000/aqi-img:latest
+          push: true
 
 
       - name: View Docker images
