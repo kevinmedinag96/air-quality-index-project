@@ -28,6 +28,11 @@ jobs:
         with:
           driver-opts: network=host
           #driver: docker
+      - name: test secrets
+        run: |
+          echo "this is  a test..."
+          echo ${{ secrets.KEVIN_AQICN_KEY }}
+          echo "end of testing..."
       
       - name: Build Docker Image
         uses: docker/build-push-action@v6
