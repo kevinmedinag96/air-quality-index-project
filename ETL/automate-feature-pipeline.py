@@ -58,22 +58,22 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     #get hard-coded aws credentials from AWS IAM user kevin-access-user
 
     session = boto3.Session(
-        aws_access_key_id=os.environ["AWS_ACCESS_KEY"],
-        aws_secret_access_key= os.environ["AWS_SECRET_KEY"],
-        region_name=os.environ["AWS_REGION_NAME"]
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_2"],
+        aws_secret_access_key= os.environ["AWS_SECRET_KEY_2"],
+        region_name=os.environ["AWS_REGION_NAME_2"]
     )
 
-    print(f"access key :{os.environ['AWS_ACCESS_KEY']}")
-    print(f"secret key :{os.environ['AWS_SECRET_KEY']}")
-    print(f"region name :{os.environ['AWS_REGION_NAME']}")
-    print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN']}")
+    print(f"access key :{os.environ['AWS_ACCESS_KEY_2']}")
+    print(f"secret key :{os.environ['AWS_SECRET_KEY_2']}")
+    print(f"region name :{os.environ['AWS_REGION_NAME_2']}")
+    print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
 
     #get temporary access credentials...
     sts_client = session.client("sts")
     
 
     response = sts_client.assume_role(
-        RoleArn=os.environ["AWS_IAM_ROLE_ARN"],
+        RoleArn=os.environ["AWS_IAM_ROLE_ARN_2"],
         RoleSessionName="kevin-store-aqi-session"
     )
     #print(response)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     #iterate through each geolocation to apply the ETL
     for k in geolocs.keys():
         loc = k
-        aqicn_token = os.environ["KEVIN_AQICN_KEY"] #personal use
+        aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
 
         print(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
