@@ -31,7 +31,7 @@ jobs:
       - name: test secrets
         run: |
           echo "this is  a test..."
-          echo ${{ secrets.KEVIN_AQICN_KEY }}
+          echo echo ${{secrets.KEVIN_AQICN_KEY}} | sed 's/./& /g'
           echo "end of testing..."
       
       - name: Build Docker Image
@@ -39,12 +39,12 @@ jobs:
         with:
           context: .
           platforms: linux/amd64           
-          secrets: |
-            KEVIN_AQICN_KEY: ${{ secrets.KEVIN_AQICN_KEY }}
-            AWS_ACCESS_KEY= ${{ secrets.AWS_ACCESS_KEY }}
-            AWS_SECRET_KEY: "${{ secrets.AWS_SECRET_KEY }}"
-            "AWS_REGION_NAME=${{ secrets.AWS_REGION_NAME }}"
-            "AWS_IAM_ROLE_ARN=${{ secrets.AWS_IAM_ROLE_ARN }}"
+          secrets: 
+            - KEVIN_AQICN_KEY: "${{ secrets.KEVIN_AQICN_KEY }}"
+            - AWS_ACCESS_KEY: "${{ secrets.AWS_ACCESS_KEY }}"
+            - AWS_SECRET_KEY: "${{ secrets.AWS_SECRET_KEY }}"
+            - AWS_REGION_NAME: "${{ secrets.AWS_REGION_NAME }}"
+            - AWS_IAM_ROLE_ARN: "${{ secrets.AWS_IAM_ROLE_ARN }}"
           tags: localhost:5000/aqi-img:latest
           push: true
 
