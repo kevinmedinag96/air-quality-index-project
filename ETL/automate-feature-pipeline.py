@@ -35,6 +35,8 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     #Transform...
     saved_cols = ["co","no2","pm10","pm25","o3","so2"]
     pollutants = response["data"]["iaqi"]
+    print(f"response : {response}")
+    print(pollutants)
 
     for k in pollutants.keys():
         pollutants[k] = round(Decimal(pollutants[k]["v"]),3)
