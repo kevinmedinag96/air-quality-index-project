@@ -18,6 +18,7 @@ FROM python:3.11.10-alpine3.20
 #ENV AWS_IAM_ROLE_ARN_2=$AWS_IAM_ROLE_ARN
 
 RUN --mount=type=secret,id=KEVIN_AQICN_KEY, env=KEVIN_AQICN_KEY
+
 #echo --token-from-env $KEVIN_AQICN_KEY
 #--mount=type=secret,id=AWS_ACCESS_KEY \
 #--mount=type=secret,id=AWS_SECRET_KEY \
