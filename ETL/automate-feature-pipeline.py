@@ -41,7 +41,12 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     for k in pollutants.keys():
         pollutants[k] = round(Decimal(pollutants[k]["v"]),3)
         
-    data_json = {name : pollutants[name] for name in saved_cols}
+
+    data_json = {}
+    for name in saved_cols:
+        if name in pollutants:
+            data_json[name] = pollutants[name]
+
     data_json["datetime"] = datetime.now(pytz.timezone("America/Mexico_City")).strftime("%d/%m/%Y, %H:%M:%S")
     
     data_json["location"] = input_aqicn.Location
