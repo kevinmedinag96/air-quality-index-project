@@ -67,7 +67,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     session = boto3.Session(
         aws_access_key_id=os.environ["AWS_ACCESS_KEY_2"],
         aws_secret_access_key= os.environ["AWS_SECRET_KEY_2"],
-        region_name=os.environ["AWS_REGION_NAME_2"]
+        region_name="us-east-1"
     )
 
     print(f"access key :{os.environ['AWS_ACCESS_KEY_2']}")
