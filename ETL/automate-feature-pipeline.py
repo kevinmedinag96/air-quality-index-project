@@ -76,7 +76,9 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
 
     #get temporary access credentials...
+    print("hey...")
     sts_client = session.client("sts")
+    print("yo...")
     
 
     response = sts_client.assume_role(
