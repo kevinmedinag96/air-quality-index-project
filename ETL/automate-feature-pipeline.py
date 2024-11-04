@@ -64,28 +64,28 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     #get hard-coded aws credentials from AWS IAM user kevin-access-user
 
-    session = boto3.Session(
-        aws_access_key_id=os.environ["AWS_ACCESS_KEY_2"],
-        aws_secret_access_key= os.environ["AWS_SECRET_KEY_2"],
-        region_name="us-east-1"
-    )
+    #session = boto3.Session(
+    #    aws_access_key_id=os.environ["AWS_ACCESS_KEY_2"],
+    #    aws_secret_access_key= os.environ["AWS_SECRET_KEY_2"],
+    #    region_name="us-east-1"
+    #)
 
-    print(f"access key :{os.environ['AWS_ACCESS_KEY_2']}")
-    print(f"secret key :{os.environ['AWS_SECRET_KEY_2']}")
-    print(f"region name :{os.environ['AWS_REGION_NAME_2']}")
-    print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
+    #print(f"access key :{os.environ['AWS_ACCESS_KEY_2']}")
+    #print(f"secret key :{os.environ['AWS_SECRET_KEY_2']}")
+    #print(f"region name :{os.environ['AWS_REGION_NAME_2']}")
+    #print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
 
     #get temporary access credentials...
     print("hey...")
-    sts_client = session.client("sts")
+    sts_client = boto3.client("sts")#session.client("sts")
     print("yo...")
     
 
     response = sts_client.assume_role(
-        RoleArn=os.environ["AWS_IAM_ROLE_ARN_2"],
+        RoleArn="arn:aws:iam::982534381087:role/kevin-aqi-proj-role",#os.environ["AWS_IAM_ROLE_ARN_2"],
         RoleSessionName="kevin-store-aqi-session"
     )
-    #print(response)
+    print(response)
 
     #manipulate dynamodb desired table...
     new_session = boto3.Session(aws_access_key_id=response['Credentials']['AccessKeyId'],
