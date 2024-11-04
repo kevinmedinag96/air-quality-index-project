@@ -9,26 +9,25 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  aqi_docker_container:      
+  aqi_docker_container:    
       
     runs-on: ubuntu-latest
     services:
       registry:
         image: registry:2
         ports:
-          - 5000:5000
-    
+          - 5000:5000    
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       
       - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-region: us-east-1
-        role-to-assume: arn:aws:iam::982534381087:role/kevin-aqi-proj-role
-        role-session-name: kevin-store-aqi-session
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::982534381087:role/kevin-aqi-proj-role
+          role-session-name: kevin-store-aqi-session
       
       - name: Print assumed role
         run: aws sts get-caller-identity
@@ -41,6 +40,7 @@ jobs:
         with:
           driver-opts: network=host
           #driver: docker
+
       #- name: test secrets
       #  run: |
       #    echo "this is  a test..."
