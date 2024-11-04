@@ -95,7 +95,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     dynamodb = new_session.resource("dynamodb") """
     print("setting dynamodb client..")
-    dynamodb = boto3.resource("dynamodb")#boto3.client("dynamodb",region_name="us-east-1")
+    dynamodb = boto3.resource("dynamodb",region="us-east-1")#boto3.client("dynamodb",region_name="us-east-1")
 
     print("getting dynamodb table..")
 
