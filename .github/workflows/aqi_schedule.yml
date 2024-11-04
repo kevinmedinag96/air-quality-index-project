@@ -8,6 +8,9 @@ permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
 
+env:
+  AWS_ACCNT_NO: "982534381087"
+
 jobs:
   aqi_docker_container:    
       
@@ -26,7 +29,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::982534381087:role/kevin-aqi-proj-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCNT_NO }}:role/kevin-aqi-proj-role
           role-session-name: kevin-store-aqi-session
       
       - name: Print assumed role
