@@ -76,8 +76,8 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     #print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
 
     #get temporary access credentials...
-    print("hey...")
-    sts_client = boto3.client("sts")#session.client("sts")
+    """ print("hey...")
+    sts_client = boto3.client("dynamodb")#session.client("sts")
     print("yo...")
     
 
@@ -93,7 +93,12 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
                       aws_session_token=response['Credentials']['SessionToken'],
                       region_name="us-east-1")
 
-    dynamodb = new_session.resource("dynamodb")
+    dynamodb = new_session.resource("dynamodb") """
+    print("setting dynamodb client..")
+    dynamodb = boto3.client("dynamodb")
+
+    print("getting dynamodb table..")
+
     table = dynamodb.Table('AirQualityIndexRecords')
 
     data_json["id"] = table.scan()["Count"]
