@@ -2,43 +2,21 @@
 FROM python:3.11.10-alpine3.20
 
 #environment variables...
-#ARG KEVIN_AQICN_KEY
-#ENV KEVIN_AQICN_KEY_2=$KEVIN_AQICN_KEY
+ARG KEVIN_AQICN_KEY
+ENV KEVIN_AQICN_KEY_2=$KEVIN_AQICN_KEY
 
-#ARG AWS_ACCESS_KEY
-#ENV AWS_ACCESS_KEY_2=$AWS_ACCESS_KEY
+ARG AWS_ACCESS_KEY
+ENV AWS_ACCESS_KEY_2=$AWS_ACCESS_KEY
 
-#ARG AWS_SECRET_KEY
-#ENV AWS_SECRET_KEY_2=$AWS_SECRET_KEY
+ARG AWS_SECRET_KEY
+ENV AWS_SECRET_KEY_2=$AWS_SECRET_KEY
 
-#ARG AWS_REGION_NAME
-#ENV AWS_REGION_NAME_2=$AWS_REGION_NAME
+ARG AWS_REGION_NAME
+ENV AWS_REGION_NAME_2=$AWS_REGION_NAME
 
-#ARG AWS_SESSION_TOKEN
-#ENV AWS_SESSION_TOKEN_2=$AWS_SESSION_TOKEN
+ARG AWS_SESSION_TOKEN
+ENV AWS_SESSION_TOKEN_2=$AWS_SESSION_TOKEN
 
-
-RUN --mount=type=secret,id=KEVIN_AQICN_KEY,target=/run/secrets/id
-RUN --mount=type=secret,id=AWS_ACCESS_KEY,target=/run/secrets/id 
-RUN --mount=type=secret,id=AWS_SECRET_KEY,target=/run/secrets/id 
-RUN --mount=type=secret,id=AWS_REGION_NAME,target=/run/secrets/id 
-RUN --mount=type=secret,id=AWS_SESSION_TOKEN,target=/run/secrets/id
-
-#echo --token-from-env $KEVIN_AQICN_KEY
-#--mount=type=secret,id=AWS_ACCESS_KEY \
-#--mount=type=secret,id=AWS_SECRET_KEY \
-#--mount=type=secret,id=AWS_REGION_NAME \
-#--mount=type=secret,id=AWS_IAM_ROLE_ARN
-
-RUN echo "testing..."
-
-#RUN ls -la /home/runner/work/_temp/docker-actions-toolkit-26Y4tD/
-
-RUN ls -la /run/secrets/
-
-
-
-Run echo "end testing..."
 WORKDIR /app
 
 #install third party packages...
