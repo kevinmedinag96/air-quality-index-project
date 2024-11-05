@@ -51,7 +51,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64           
-          build-args: |
+          secrets: |
             KEVIN_AQICN_KEY= ${{ env.kevin_aqicn_key }}
             AWS_ACCESS_KEY= ${{ steps.creds.outputs.aws-access-key-id }}
             AWS_SECRET_KEY= ${{ steps.creds.outputs.aws-secret-access-key }}
