@@ -55,49 +55,6 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     logger.info(data_json)
 
-    # get boto3 dynamoDB client for desired table
-    #dynamodb = boto3.resource('dynamodb')
-    """ session = IAMRolesAnywhereSession(
-        #profile_arn="arn:aws:rolesanywhere:eu-central-1:************:profile/a6294488-77cf-4d4a-8c5c-40b96690bbf0",
-        role_arn="arn:aws:iam::982534381087:role/service-role/SageMaker-DataScientist2",
-        #trust_anchor_arn="arn:aws:rolesanywhere:eu-central-1::************::trust-anchor/4579702c-9abb-47c2-88b2-c734e0b29539",
-        #certificate='certificate.pem',
-        #private_key='privkey.pem',
-        region="us-east-1"
-    ).get_session() """
-
-    #get hard-coded aws credentials from AWS IAM user kevin-access-user
-
-    #session = boto3.Session(
-    #    aws_access_key_id=os.environ["AWS_ACCESS_KEY_2"],
-    #    aws_secret_access_key= os.environ["AWS_SECRET_KEY_2"],
-    #    region_name="us-east-1"
-    #)
-
-    #print(f"access key :{os.environ['AWS_ACCESS_KEY_2']}")
-    #print(f"secret key :{os.environ['AWS_SECRET_KEY_2']}")
-    #print(f"region name :{os.environ['AWS_REGION_NAME_2']}")
-    #print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
-
-    #get temporary access credentials...
-    """ print("hey...")
-    sts_client = boto3.client("dynamodb")#session.client("sts")
-    print("yo...")
-    
-
-    response = sts_client.assume_role(
-        RoleArn="arn:aws:iam::982534381087:role/kevin-aqi-proj-role",#os.environ["AWS_IAM_ROLE_ARN_2"],
-        RoleSessionName="kevin-store-aqi-session"
-    )
-    print(response)
-
-    #manipulate dynamodb desired table...
-    new_session = boto3.Session(aws_access_key_id=response['Credentials']['AccessKeyId'],
-                      aws_secret_access_key=response['Credentials']['SecretAccessKey'],
-                      aws_session_token=response['Credentials']['SessionToken'],
-                      region_name="us-east-1")
-
-    dynamodb = new_session.resource("dynamodb") """
     logger.info("setting dynamodb resource..")
 
     session = boto3.session.Session(
@@ -107,9 +64,9 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
         region_name= args.aws_region
     )
 
-    dynamodb = session.resource("dynamodb")
+    logging.info(f" session from credentials : {session.get_credentials()}")
 
-    #dynamodb = boto3.client("dynamodb",region_name="us-east-1")
+    dynamodb = session.resource("dynamodb")
 
     logger.info("putting items in table..")
 

@@ -36,12 +36,7 @@ jobs:
           role-to-assume: ${{ env.role_to_assume }}
           role-session-name: ${{ env.role_session_name }}
           output-credentials: true
-      
-      - name: Debug AWS DynamoDB source
-        run: |
-          aws dynamodb scan --table-name AirQualityIndexRecords
-
-            
+                  
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3 # ---> unlock when building with docker buildx docker-container driver
 
@@ -51,32 +46,13 @@ jobs:
           driver-opts: network=host
           #driver: docker
 
-      #- name: test secrets
-      #  run: |
-      #    echo "this is  a test..."
-      #    echo echo ${{secrets.KEVIN_AQICN_KEY}} | sed 's/./& /g'
-      #    echo "end of testing..."
-      
-      #- name: Build Docker Image
-      #  run: |
-      #    docker build -t localhost:5000/aqi-img:latest \
-      #    --build-arg KEVIN_AQICN_KEY= "${{ secrets.KEVIN_AQICN_KEY }}" \
-      #    --build-arg AWS_ACCESS_KEY= "${{ secrets.AWS_ACCESS_KEY }}" \
-      #    --build-arg AWS_SECRET_KEY= "${{ secrets.AWS_SECRET_KEY }}" \
-      #    --build-arg AWS_REGION_NAME= "${{ secrets.AWS_REGION_NAME }}" \
-      #    --build-arg AWS_IAM_ROLE_ARN= "${{ secrets.AWS_IAM_ROLE_ARN }}" \
-      #    .
-      
-      #- name: Push Docker Image
-      #  run: |
-      #    docker image push localhost:5000/aqi-img:latest
       
       - name: Build Docker Image
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64           
-          build-args: |
+          secrets: |
             KEVIN_AQICN_KEY= ${{ env.kevin_aqicn_key }}
             AWS_ACCESS_KEY= ${{ steps.creds.outputs.aws-access-key-id }}
             AWS_SECRET_KEY= ${{ steps.creds.outputs.aws-secret-access-key }}
@@ -86,22 +62,13 @@ jobs:
           push: true
 
 
-      - name: View Docker images
-        run: |
-          ls -la 
-          docker images
-          docker buildx imagetools inspect localhost:5000/aqi-img:latest
 
       - name: Run Docker Container
         run:
           docker run localhost:5000/aqi-img:latest
             
 
-      #- name: Login to Docker Hub
-      #  uses: docker/login-action@v2
-      #  with:
-      #    username: ${{secrets.DOCKER_USERNAME}}
-      #    password: ${{secrets.DOCKER_PASSWORD}}
+
       
 
       
