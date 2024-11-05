@@ -36,12 +36,7 @@ jobs:
           role-to-assume: ${{ env.role_to_assume }}
           role-session-name: ${{ env.role_session_name }}
           output-credentials: true
-      
-      - name: Debug AWS DynamoDB source
-        run: |
-          aws dynamodb scan --table-name AirQualityIndexRecords
-
-            
+                  
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3 # ---> unlock when building with docker buildx docker-container driver
 
@@ -82,6 +77,8 @@ jobs:
             AWS_SECRET_KEY= ${{ steps.creds.outputs.aws-secret-access-key }}
             AWS_SESSION_TOKEN=${{ steps.creds.outputs.aws-session-token }}
             AWS_REGION_NAME= ${{ env.aws_region_name }}
+            AWS_ROLE_TO_ASSUME= ${{ env.role_to_assume }}
+            AWS_ROLE_SESSION_NAME=${{ env.role_session_name}}
           tags: localhost:5000/aqi-img:latest
           push: true
 

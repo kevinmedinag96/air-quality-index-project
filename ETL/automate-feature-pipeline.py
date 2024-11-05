@@ -100,14 +100,31 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     dynamodb = new_session.resource("dynamodb") """
     logger.info("setting dynamodb resource..")
 
-    session = boto3.session.Session(
-        aws_access_key_id=args.aws_acess_key,
-        aws_secret_access_key=args.aws_secret_key,
-        aws_session_token=args.aws_session_token,
-        region_name= args.aws_region
-    )
+    #session = boto3.session.Session(
+    #    aws_access_key_id=args.aws_acess_key,
+    #    aws_secret_access_key=args.aws_secret_key,
+    #    aws_session_token=args.aws_session_token,
+    #    region_name= args.aws_region
+    #)
+    sts_client = boto3.client("sts")
 
-    dynamodb = session.resource("dynamodb")
+    response = sts_client.assume_role(
+        RoleArn= args.role_to_asumme
+        RoleSessionName= args.role_session_name
+    )
+    logger.info(response)
+
+    logger.info("manipulate dynamodb desired table...")
+    new_session = boto3.Session(aws_access_key_id=response['Credentials']['AccessKeyId'],
+                      aws_secret_access_key=response['Credentials']['SecretAccessKey'],
+                      aws_session_token=response['Credentials']['SessionToken'],
+                      region_name="us-east-1")
+
+    dynamodb = new_session.resource("dynamodb")
+
+
+
+    #dynamodb = boto3.resource("dynamodb")#session.resource("dynamodb")
 
     #dynamodb = boto3.client("dynamodb",region_name="us-east-1")
 
@@ -144,6 +161,8 @@ if __name__ == "__main__":
     parser.add_argument("--aws_session_token",type=str,help="Temporary Session token to AWS Resources based on IAM Role",
     default="")
     parser.add_argument("--aws_region",type=str,help="AWS region for resources",default="")
+    parser.add_argument("--role_to_asumme",type=str,help="AWS IAM ROLE ",default="")
+    parser.add_argument("--role_session_name",type=str,help="AWS IAM ROLE SESSION  ",default="")
 
     args = parser.parse_args()
 

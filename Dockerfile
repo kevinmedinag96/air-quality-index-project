@@ -17,8 +17,11 @@ ENV AWS_REGION_NAME_2=$AWS_REGION_NAME
 ARG AWS_SESSION_TOKEN
 ENV AWS_SESSION_TOKEN_2=$AWS_SESSION_TOKEN
 
-#ARG AWS_IAM_ROLE_ARN
-#ENV AWS_IAM_ROLE_ARN_2=$AWS_IAM_ROLE_ARN
+ARG AWS_ROLE_TO_ASSUME
+ENV AWS_ROLE_TO_ASSUME_2=$AWS_ROLE_TO_ASSUME
+
+ARG AWS_ROLE_SESSION_NAME
+ENV AWS_ROLE_SESSION_NAME_2=$AWS_ROLE_SESSION_NAME
 
 #RUN --mount=type=secret,id=KEVIN_AQICN_KEY,env=KEVIN_AQICN_KEY \
 #    --mount=type=secret,id=AWS_ACCESS_KEY,env=AWS_ACCESS_KEY \
@@ -51,7 +54,7 @@ RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 #COPY ETL files
 COPY ./ETL ./ETL
 
-CMD ["sh","-c", "python3 ETL/automate-feature-pipeline.py --aqi_token ${KEVIN_AQICN_KEY_2} --aws_acess_key ${AWS_ACCESS_KEY_2} --aws_secret_key ${AWS_SECRET_KEY_2} --aws_session_token ${AWS_SESSION_TOKEN_2} --aws_region ${AWS_REGION_NAME_2}"]
+CMD ["sh","-c", "python3 ETL/automate-feature-pipeline.py --aqi_token ${KEVIN_AQICN_KEY_2} --aws_acess_key ${AWS_ACCESS_KEY_2} --aws_secret_key ${AWS_SECRET_KEY_2} --aws_session_token ${AWS_SESSION_TOKEN_2} --aws_region ${AWS_REGION_NAME_2} --role_to_asumme ${AWS_ROLE_TO_ASSUME_2} --role_session_name ${AWS_ROLE_SESSION_NAME_2}"]
 
 #CMD ["python3","ETL/automate-feature-pipeline.py","--aqi_token",$KEVIN_AQICN_KEY, "--aws_acess_key",$AWS_ACCESS_KEY, 
 #"--aws_secret_key",$AWS_SECRET_KEY,"--aws_session_token",$AWS_SESSION_TOKEN,"--aws_region",$AWS_REGION_NAME]
