@@ -34,9 +34,8 @@ RUN echo "testing..."
 
 #RUN ls -la /home/runner/work/_temp/docker-actions-toolkit-26Y4tD/
 
-RUN ls -la $HOME/root
 RUN ls -la /run/
-RUN ls -la $HOME/runner/work/_temp/docker-actions-toolkit-6IqCSz/
+RUN ls -la root/runner/work/_temp/docker-actions-toolkit-6IqCSz/
 
 
 
