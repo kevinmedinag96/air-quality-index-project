@@ -109,7 +109,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     sts_client = boto3.client("sts")
 
     response = sts_client.assume_role(
-        RoleArn= args.role_to_asumme
+        RoleArn= args.role_to_assume,
         RoleSessionName= args.role_session_name
     )
     logger.info(response)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument("--aws_session_token",type=str,help="Temporary Session token to AWS Resources based on IAM Role",
     default="")
     parser.add_argument("--aws_region",type=str,help="AWS region for resources",default="")
-    parser.add_argument("--role_to_asumme",type=str,help="AWS IAM ROLE ",default="")
+    parser.add_argument("--role_to_assume",type=str,help="AWS IAM ROLE ",default="")
     parser.add_argument("--role_session_name",type=str,help="AWS IAM ROLE SESSION  ",default="")
 
     args = parser.parse_args()
