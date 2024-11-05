@@ -33,9 +33,6 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
             "token": input_aqicn.Token
         }
     ).json()
-
-    
-    logger.info(f"response : {response}")
     
     #Transform...
     saved_cols = ["co","no2","pm10","pm25","o3","so2"]
@@ -60,13 +57,11 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     logger.info("setting dynamodb resource..")
 
-    logger.info(f"access key : {os.environ['AWS_ACCESS_KEY_2']}\nsecret key: {os.environ['AWS_SECRET_KEY_2']}\nsession-token :{os.environ['AWS_SESSION_TOKEN_2']}")
-
     session = boto3.session.Session(
-        aws_access_key_id= os.environ["AWS_ACCESS_KEY_2"],
-        aws_secret_access_key=os.environ["AWS_SECRET_KEY_2"],
-        aws_session_token=os.environ["AWS_SESSION_TOKEN_2"],
-        region_name= os.environ["AWS_REGION_NAME_2"]
+        aws_access_key_id= args.aws_acess_key,
+        aws_secret_access_key=args.aws_secret_key,
+        aws_session_token=args.aws_session_token,
+        region_name= args.aws_region
     )
 
     logging.info(f" session from credentials : {session.get_credentials()}")
@@ -96,11 +91,25 @@ def construct_input(loc: str, token : str):
     return AqiInput(Location=loc, Token = token)
 
 if __name__ == "__main__":
+    #parse input arguments...
+    parser = argparse.ArgumentParser(description="Store AQI data in AWS DynamoDB")
+    parser.add_argument("--aqi_token",type=str,help="AQI access token to AQICN.ORG (personal)",default="")
+    parser.add_argument("--aws_acess_key",type=str,help="AWS Access Key to AWS Resources based on IAM Role",
+    default="")
+    parser.add_argument("--aws_secret_key",type=str,help="AWS Secret Key to AWS Resources based on IAM Role",
+    default="")
+    parser.add_argument("--aws_session_token",type=str,help="Temporary Session token to AWS Resources based on IAM Role",
+    default="")
+    parser.add_argument("--aws_region",type=str,help="AWS region for resources",default="")
+
+    args = parser.parse_args()
+
+    logger.info(f"Debug input args: {args}")
     
     #iterate through each geolocation to apply the ETL
     for k in geolocs.keys():
         loc = k
-        aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
+        aqicn_token = args.aqi_token
 
         logger.info(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
