@@ -55,78 +55,20 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     logger.info(data_json)
 
-    # get boto3 dynamoDB client for desired table
-    #dynamodb = boto3.resource('dynamodb')
-    """ session = IAMRolesAnywhereSession(
-        #profile_arn="arn:aws:rolesanywhere:eu-central-1:************:profile/a6294488-77cf-4d4a-8c5c-40b96690bbf0",
-        role_arn="arn:aws:iam::982534381087:role/service-role/SageMaker-DataScientist2",
-        #trust_anchor_arn="arn:aws:rolesanywhere:eu-central-1::************::trust-anchor/4579702c-9abb-47c2-88b2-c734e0b29539",
-        #certificate='certificate.pem',
-        #private_key='privkey.pem',
-        region="us-east-1"
-    ).get_session() """
-
-    #get hard-coded aws credentials from AWS IAM user kevin-access-user
-
-    #session = boto3.Session(
-    #    aws_access_key_id=os.environ["AWS_ACCESS_KEY_2"],
-    #    aws_secret_access_key= os.environ["AWS_SECRET_KEY_2"],
-    #    region_name="us-east-1"
-    #)
-
-    #print(f"access key :{os.environ['AWS_ACCESS_KEY_2']}")
-    #print(f"secret key :{os.environ['AWS_SECRET_KEY_2']}")
-    #print(f"region name :{os.environ['AWS_REGION_NAME_2']}")
-    #print(f"role arn: {os.environ['AWS_IAM_ROLE_ARN_2']}")
-
-    #get temporary access credentials...
-    """ print("hey...")
-    sts_client = boto3.client("dynamodb")#session.client("sts")
-    print("yo...")
-    
-
-    response = sts_client.assume_role(
-        RoleArn="arn:aws:iam::982534381087:role/kevin-aqi-proj-role",#os.environ["AWS_IAM_ROLE_ARN_2"],
-        RoleSessionName="kevin-store-aqi-session"
-    )
-    print(response)
-
-    #manipulate dynamodb desired table...
-    new_session = boto3.Session(aws_access_key_id=response['Credentials']['AccessKeyId'],
-                      aws_secret_access_key=response['Credentials']['SecretAccessKey'],
-                      aws_session_token=response['Credentials']['SessionToken'],
-                      region_name="us-east-1")
-
-    dynamodb = new_session.resource("dynamodb") """
     logger.info("setting dynamodb resource..")
 
-    #session = boto3.session.Session(
-    #    aws_access_key_id=args.aws_acess_key,
-    #    aws_secret_access_key=args.aws_secret_key,
-    #    aws_session_token=args.aws_session_token,
-    #    region_name= args.aws_region
-    #)
-    sts_client = boto3.client("sts")
+    logger.info(f"access key : {os.environ["AWS_ACCESS_KEY_2"]}\nsecret key: {os.environ["AWS_SECRET_KEY_2"]}\nsession-token :{os.environ["AWS_SESSION_TOKEN_2"]}")
 
-    response = sts_client.assume_role(
-        RoleArn= args.role_to_assume,
-        RoleSessionName= args.role_session_name
+    session = boto3.session.Session(
+        aws_access_key_id= os.environ["AWS_ACCESS_KEY_2"],
+        aws_secret_access_key=os.environ["AWS_SECRET_KEY_2"],
+        aws_session_token=os.environ["AWS_SESSION_TOKEN_2"],
+        region_name= os.environ["AWS_REGION_NAME_2"]
     )
-    logger.info(response)
 
-    logger.info("manipulate dynamodb desired table...")
-    new_session = boto3.Session(aws_access_key_id=response['Credentials']['AccessKeyId'],
-                      aws_secret_access_key=response['Credentials']['SecretAccessKey'],
-                      aws_session_token=response['Credentials']['SessionToken'],
-                      region_name="us-east-1")
+    logger.info(f"credentials from session : {session.get_credentials()}")
 
-    dynamodb = new_session.resource("dynamodb")
-
-
-
-    #dynamodb = boto3.resource("dynamodb")#session.resource("dynamodb")
-
-    #dynamodb = boto3.client("dynamodb",region_name="us-east-1")
+    dynamodb = session.resource("dynamodb")
 
     logger.info("putting items in table..")
 
@@ -151,28 +93,12 @@ def construct_input(loc: str, token : str):
     return AqiInput(Location=loc, Token = token)
 
 if __name__ == "__main__":
-    #parse input arguments...
-    parser = argparse.ArgumentParser(description="Store AQI data in AWS DynamoDB")
-    parser.add_argument("--aqi_token",type=str,help="AQI access token to AQICN.ORG (personal)",default="")
-    parser.add_argument("--aws_acess_key",type=str,help="AWS Access Key to AWS Resources based on IAM Role",
-    default="")
-    parser.add_argument("--aws_secret_key",type=str,help="AWS Secret Key to AWS Resources based on IAM Role",
-    default="")
-    parser.add_argument("--aws_session_token",type=str,help="Temporary Session token to AWS Resources based on IAM Role",
-    default="")
-    parser.add_argument("--aws_region",type=str,help="AWS region for resources",default="")
-    parser.add_argument("--role_to_assume",type=str,help="AWS IAM ROLE ",default="")
-    parser.add_argument("--role_session_name",type=str,help="AWS IAM ROLE SESSION  ",default="")
-
-    args = parser.parse_args()
-
-    logger.info(f"Debug input args: {args}")
-
+    
     #iterate through each geolocation to apply the ETL
     for k in geolocs.keys():
         loc = k
-        #aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
-        aqicn_token = args.aqi_token
+        aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
+
 
         logger.info(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
