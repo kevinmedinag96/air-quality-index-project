@@ -104,7 +104,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     #table = dynamodb.Table('AirQualityIndexRecords')
 
     data_json["id"] = dynamodb.scan(
-    "AirQualityIndexRecords")["Count"]
+    TableName="AirQualityIndexRecords")["Count"]
 
     #Load...
     dynamodb.put_item(
