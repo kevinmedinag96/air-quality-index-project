@@ -2,7 +2,7 @@ name: GitHubAction Job Schedule ETL from aqicn.org
 
 on:
  schedule:
-  - cron: '*/10 * * * *'
+  - cron: '*/2 * * * *'
 
 permissions:
   id-token: write # This is required for requesting the JWT
