@@ -57,7 +57,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     logger.info("setting dynamodb resource..")
 
-    logger.info(f"access key : {os.environ["AWS_ACCESS_KEY_2"]}\nsecret key: {os.environ["AWS_SECRET_KEY_2"]}\nsession-token :{os.environ["AWS_SESSION_TOKEN_2"]}")
+    logger.info(f"access key : {os.environ['AWS_ACCESS_KEY_2']}\nsecret key: {os.environ['AWS_SECRET_KEY_2']}\nsession-token :{os.environ['AWS_SESSION_TOKEN_2']}")
 
     session = boto3.session.Session(
         aws_access_key_id= os.environ["AWS_ACCESS_KEY_2"],
@@ -98,7 +98,6 @@ if __name__ == "__main__":
     for k in geolocs.keys():
         loc = k
         aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
-
 
         logger.info(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
