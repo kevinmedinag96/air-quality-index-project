@@ -37,9 +37,11 @@ jobs:
           role-session-name: ${{ env.role_session_name }}
           output-credentials: true
       
-      - name: get caller identity creds and session
-        run: aws sts get-caller-identity
-      
+      - name: Debug AWS DynamoDB source
+        run: |
+          aws dynamodb scan --table-name AirQualityIndexRecords
+
+            
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3 # ---> unlock when building with docker buildx docker-container driver
 
