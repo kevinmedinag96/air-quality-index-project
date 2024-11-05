@@ -30,15 +30,17 @@ RUN --mount=type=secret,id=KEVIN_AQICN_KEY,env=KEVIN_AQICN_KEY_2 \
 #--mount=type=secret,id=AWS_REGION_NAME \
 #--mount=type=secret,id=AWS_IAM_ROLE_ARN
 
-#RUN echo "testing..."
+RUN echo "testing..."
 
 #RUN ls -la /home/runner/work/_temp/docker-actions-toolkit-26Y4tD/
 
-#RUN echo $KEVIN_AQICN_KEY
+RUN ls -la ~
+RUN echo $KEVIN_AQICN_KEY_2
+RUN echo $HOME
 
 
 
-#Run echo "end testing..."
+Run echo "end testing..."
 WORKDIR /app
 
 #install third party packages...
