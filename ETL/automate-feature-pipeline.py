@@ -5,6 +5,8 @@ import boto3
 from decimal import Decimal
 from pydantic import BaseModel
 import os
+import argparse
+from loguru import logger
 
 
 geolocs = {
@@ -39,7 +41,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     #print(pollutants)
 
     for k in pollutants.keys():
-        pollutants[k] = {"N" :str(round(Decimal(pollutants[k]["v"]),3))}
+        pollutants[k] = round(Decimal(pollutants[k]["v"]),3)
         
 
     data_json = {}
@@ -47,11 +49,11 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
         if name in pollutants:
             data_json[name] = pollutants[name]
 
-    data_json["datetime"] = { "S": datetime.now(pytz.timezone("America/Mexico_City")).strftime("%d/%m/%Y, %H:%M:%S") }
+    data_json["datetime"] = datetime.now(pytz.timezone("America/Mexico_City")).strftime("%d/%m/%Y, %H:%M:%S") 
     
-    data_json["location"] = {"S" : input_aqicn.Location }
+    data_json["location"] = input_aqicn.Location 
 
-    print(data_json)
+    logger.info(data_json)
 
     # get boto3 dynamoDB client for desired table
     #dynamodb = boto3.resource('dynamodb')
@@ -96,23 +98,31 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
                       region_name="us-east-1")
 
     dynamodb = new_session.resource("dynamodb") """
-    print("setting dynamodb client..")
-    dynamodb = boto3.client("dynamodb",region_name="us-east-1")
+    logger.info("setting dynamodb resource..")
 
-    print("putting items in table..")
+    session = boto3.session.Session(
+        aws_access_key_id=args.aws_acess_key,
+        aws_secret_access_key=args.aws_secret_key,
+        aws_session_token=args.aws_session_token,
+        region_name= args.aws_region
+    )
 
-    #table = dynamodb.Table('AirQualityIndexRecords')
+    dynamodb = session.resource("dynamodb")
 
-    data_json["id"] = dynamodb.scan(
-    TableName="AirQualityIndexRecords")["Count"]
+    #dynamodb = boto3.client("dynamodb",region_name="us-east-1")
+
+    logger.info("putting items in table..")
+
+    table = dynamodb.Table('AirQualityIndexRecords')
+
+    data_json["id"] = table.scan()["Count"]
 
     #Load...
-    dynamodb.put_item(
-        TableName= "AirQualityIndexRecords",
+    table.put_item(
         Item=data_json
     ) 
 
-    print("Done...")
+    logger.info("Done...")
     
 
    
@@ -124,12 +134,27 @@ def construct_input(loc: str, token : str):
     return AqiInput(Location=loc, Token = token)
 
 if __name__ == "__main__":
+    #parse input arguments...
+    parser = argparse.ArgumentParser(description="Store AQI data in AWS DynamoDB")
+    parser.add_argument("--aqi_token",type=str,help="AQI access token to AQICN.ORG (personal)",default="")
+    parser.add_argument("--aws_acess_key",type=str,help="AWS Access Key to AWS Resources based on IAM Role",
+    default="")
+    parser.add_argument("--aws_secret_key",type=str,help="AWS Secret Key to AWS Resources based on IAM Role",
+    default="")
+    parser.add_argument("--aws_session_token",type=str,help="Temporary Session token to AWS Resources based on IAM Role",
+    default="")
+    parser.add_argument("--aws_region",type=str,help="AWS region for resources",default="")
+
+    args = parser.parse_args()
+
+    logger.info(f"Debug input args: {args}")
+
     #iterate through each geolocation to apply the ETL
     for k in geolocs.keys():
         loc = k
         #aqicn_token = os.environ["KEVIN_AQICN_KEY_2"] #personal use
-        aqicn_token = "4160d19c73429aaee7d89467b128c082b3c6b868"
+        aqicn_token = args.aqi_token
 
-        print(f"aqicn key: {aqicn_token}")
+        logger.info(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
         air_quality_index_feature_pipeline(aqicn_input)

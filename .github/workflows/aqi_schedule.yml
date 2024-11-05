@@ -8,6 +8,11 @@ permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
 
+env:
+  aws_region_name: us-east-1
+  role_to_assume: arn:aws:iam::${{ secrets.AWS_ACCNT_NO }}:role/kevin-aqi-proj-role
+  role_session_name: kevin-store-aqi-session
+  kevin_aqicn_key: ${{ secrets.KEVIN_AQICN_KEY }}
 
 jobs:
   aqi_docker_container:    
@@ -24,13 +29,15 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Configure AWS Credentials
+        id: creds
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: us-east-1
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCNT_NO }}:role/kevin-aqi-proj-role
-          role-session-name: kevin-store-aqi-session
+          aws-region: ${{ env.aws_region_name }}
+          role-to-assume: ${{ env.role_to_assume }}
+          role-session-name: ${{ env.role_session_name }}
+          output-credentials: true
       
-      - name: Print assumed role
+      - name: get caller identity creds and session
         run: aws sts get-caller-identity
       
       - name: Set up QEMU
@@ -67,12 +74,12 @@ jobs:
         with:
           context: .
           platforms: linux/amd64           
-          secrets: |
-            KEVIN_AQICN_KEY= "${{ secrets.KEVIN_AQICN_KEY }}"
-            AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}"
-            AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}"
-            AWS_REGION_NAME="${{ secrets.AWS_REGION_NAME }}"
-            AWS_IAM_ROLE_ARN="${{ secrets.AWS_IAM_ROLE_ARN }}"
+          build-args: |
+            KEVIN_AQICN_KEY= ${{ env.kevin_aqicn_key }}
+            AWS_ACCESS_KEY= ${{ steps.creds.outputs.aws-access-key-id }}
+            AWS_SECRET_KEY= ${{ steps.creds.outputs.aws-secret-access-key }}
+            AWS_SESSION_TOKEN=${{ steps.creds.outputs.aws-session-token }}
+            AWS_REGION_NAME= ${{ env.aws_region_name }}
           tags: localhost:5000/aqi-img:latest
           push: true
 
