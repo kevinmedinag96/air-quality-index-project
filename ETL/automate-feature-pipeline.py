@@ -33,6 +33,9 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
             "token": input_aqicn.Token
         }
     ).json()
+
+    
+    logger.info(f"response : {response}")
     
     #Transform...
     saved_cols = ["co","no2","pm10","pm25","o3","so2"]
