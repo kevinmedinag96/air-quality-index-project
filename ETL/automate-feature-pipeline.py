@@ -35,11 +35,11 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
     #Transform...
     saved_cols = ["co","no2","pm10","pm25","o3","so2"]
     pollutants = response["data"]["iaqi"]
-    print(f"response : {response}")
-    print(pollutants)
+    #print(f"response : {response}")
+    #print(pollutants)
 
     for k in pollutants.keys():
-        pollutants[k] = round(Decimal(pollutants[k]["v"]),3)
+        pollutants[k] = {"N" :str(round(Decimal(pollutants[k]["v"]),3))}
         
 
     data_json = {}
@@ -47,9 +47,11 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
         if name in pollutants:
             data_json[name] = pollutants[name]
 
-    data_json["datetime"] = datetime.now(pytz.timezone("America/Mexico_City")).strftime("%d/%m/%Y, %H:%M:%S")
+    data_json["datetime"] = { "S": datetime.now(pytz.timezone("America/Mexico_City")).strftime("%d/%m/%Y, %H:%M:%S") }
     
-    data_json["location"] = input_aqicn.Location
+    data_json["location"] = {"S" : input_aqicn.Location }
+
+    print(data_json)
 
     # get boto3 dynamoDB client for desired table
     #dynamodb = boto3.resource('dynamodb')
@@ -95,16 +97,18 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     dynamodb = new_session.resource("dynamodb") """
     print("setting dynamodb client..")
-    dynamodb = boto3.resource("dynamodb",region_name="us-east-1")#boto3.client("dynamodb",region_name="us-east-1")
+    dynamodb = boto3.client("dynamodb",region_name="us-east-1")
 
-    print("getting dynamodb table..")
+    print("putting items in table..")
 
-    table = dynamodb.Table('AirQualityIndexRecords')
+    #table = dynamodb.Table('AirQualityIndexRecords')
 
-    data_json["id"] = table.scan()["Count"]
+    data_json["id"] = dynamodb.scan(
+    "AirQualityIndexRecords")["Count"]
 
     #Load...
-    table.put_item(
+    dynamodb.put_item(
+        TableName= "AirQualityIndexRecords",
         Item=data_json
     ) 
 
