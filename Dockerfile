@@ -50,7 +50,6 @@ RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 #COPY ETL files
 COPY ./ETL ./ETL
 
-CMD ["python3","ETL/automate-feature-pipeline.py","--aqi_token",$KEVIN_AQICN_KEY, "--aws_acess_key",$AWS_ACCESS_KEY,
-"--aws_secret_key",$AWS_SECRET_KEY,"--aws_session_token",$AWS_SESSION_TOKEN,"--aws_region",$AWS_REGION_NAME]
+CMD ["python3","ETL/automate-feature-pipeline.py","--aqi_token",$KEVIN_AQICN_KEY, "--aws_acess_key",$AWS_ACCESS_KEY, "--aws_secret_key",$AWS_SECRET_KEY,"--aws_session_token",$AWS_SESSION_TOKEN,"--aws_region",$AWS_REGION_NAME]
 
 
