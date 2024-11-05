@@ -18,11 +18,11 @@ FROM python:3.11.10-alpine3.20
 #ENV AWS_SESSION_TOKEN_2=$AWS_SESSION_TOKEN
 
 
-RUN --mount=type=secret,id=KEVIN_AQICN_KEY,env=KEVIN_AQICN_KEY_2 \
-    --mount=type=secret,id=AWS_ACCESS_KEY,env=AWS_ACCESS_KEY_2 \
-    --mount=type=secret,id=AWS_SECRET_KEY,env=AWS_SECRET_KEY_2 \
-    --mount=type=secret,id=AWS_REGION_NAME,env=AWS_REGION_NAME_2 \
-    --mount=type=secret,id=AWS_SESSION_TOKEN,env=AWS_SESSION_TOKEN_2
+RUN --mount=type=secret,id=KEVIN_AQICN_KEY,target=/run/secrets/id
+RUN --mount=type=secret,id=AWS_ACCESS_KEY,target=/run/secrets/id 
+RUN --mount=type=secret,id=AWS_SECRET_KEY,target=/run/secrets/id 
+RUN --mount=type=secret,id=AWS_REGION_NAME,target=/run/secrets/id 
+RUN --mount=type=secret,id=AWS_SESSION_TOKEN,target=/run/secrets/id
 
 #echo --token-from-env $KEVIN_AQICN_KEY
 #--mount=type=secret,id=AWS_ACCESS_KEY \
@@ -34,9 +34,10 @@ RUN echo "testing..."
 
 #RUN ls -la /home/runner/work/_temp/docker-actions-toolkit-26Y4tD/
 
-RUN ls -la ~
-RUN echo $KEVIN_AQICN_KEY_2
-RUN echo $HOME
+RUN ls -la $HOME/root
+RUN ls -la /run/
+RUN ls -la $HOME/runner/work/_temp/docker-actions-toolkit-6IqCSz/
+
 
 
 
