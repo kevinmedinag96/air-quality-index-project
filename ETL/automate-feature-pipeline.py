@@ -64,7 +64,6 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
         region_name= args.aws_region
     )
 
-    logger.info(f" session from credentials : {session.get_credentials()}")
 
     dynamodb = session.resource("dynamodb")
 
