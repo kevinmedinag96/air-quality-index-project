@@ -72,6 +72,14 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     table = dynamodb.Table('AirQualityIndexRecords')
 
+    #query to get latest index (id) in table
+    response =table.query(
+        KeyConditionExpression=Key("id").gt("0"),
+        ScanIndexForward = False,
+        Limit =1
+    )
+    print(response)
+
     data_json["id"] = table.scan()["Count"]
 
     #Load...
