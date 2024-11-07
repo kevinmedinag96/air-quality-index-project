@@ -7,6 +7,7 @@ from pydantic import BaseModel
 import os
 import argparse
 from loguru import logger
+import time
 
 
 geolocs = {
@@ -113,3 +114,4 @@ if __name__ == "__main__":
         logger.info(f"aqicn key: {aqicn_token}")
         aqicn_input = construct_input(loc,aqicn_token)
         air_quality_index_feature_pipeline(aqicn_input)
+        time.sleep(1)

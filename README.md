@@ -7,8 +7,8 @@ This project's objective is to acquire air pollutants time series evolution of t
 3. **Train Forecasting Time-Series models**: Leverage the stored data to train data models to forecast levels of air pollution for the upcoming days.
 
 ## Progress
-**Milestone 1**: Online
-**Milestone 2**: On Development
+**Milestone 1**: Online <br>
+**Milestone 2**: On Development <br>
 **Milestone 3**: Not Started
 
 
