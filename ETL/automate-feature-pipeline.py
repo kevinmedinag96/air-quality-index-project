@@ -8,6 +8,7 @@ import os
 import argparse
 from loguru import logger
 import time
+from boto3.dynamodb.conditions import Key
 
 
 geolocs = {
