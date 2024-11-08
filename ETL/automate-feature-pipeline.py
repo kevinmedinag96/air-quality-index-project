@@ -75,7 +75,7 @@ def air_quality_index_feature_pipeline(input_aqicn : AqiInput):
 
     #query to get latest index (id) in table
     response =table.query(
-        KeyConditionExpression=Key("id").gt("0"),
+        KeyConditionExpression=Key("id").gt(0),
         ScanIndexForward = False,
         Limit =1
     )
